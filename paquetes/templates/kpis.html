@@ -3,79 +3,310 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="mb-4">Indicadores Clave (KPIs)</h2>
+
+    <!-- Títulos de los gráficos -->
+    <h3 class="mt-5">Gráficos de KPIs</h3>
     <div class="row">
-        {% for label, value in indicadores.items %}
-        <div class="col-md-6 mb-3">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ label }}</h5>
-                    <p class="card-text h4">{{ value }}</p>
-                </div>
-            </div>
+        <!-- Gráfico de barras: Usuarios vs Paquetes -->
+        <div class="col-md-6">
+            <canvas id="barUsuariosPaquetes"></canvas>
         </div>
-        {% endfor %}
+
+        <!-- Gráfico de pastel: Reservas por estado -->
+        <div class="col-md-6">
+            <canvas id="pieReservasEstado"></canvas>
+        </div>
     </div>
 
-    <h3 class="mt-5">Gráficos</h3>
-    <div class="row">
+    <div class="row mt-4">
+        <!-- Gráfico de barras apiladas: Reservas por estado -->
         <div class="col-md-6">
-            <canvas id="barChart"></canvas>
+            <canvas id="barReservasEstado"></canvas>
         </div>
+
+        <!-- Gráfico de líneas: Ingresos Totales -->
         <div class="col-md-6">
-            <canvas id="pieChart"></canvas>
+            <canvas id="lineIngresos"></canvas>
         </div>
     </div>
+
+    <div class="row mt-4">
+        <!-- Gráfico de líneas: Ingresos por Paquete -->
+        <div class="col-md-6">
+            <canvas id="lineIngresosPorPaquete"></canvas>
+        </div>
+
+        <!-- Gráfico de barras: Total de Pagos por Método -->
+        <div class="col-md-6">
+            <canvas id="barPagosPorMetodo"></canvas>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Gráfico de barras horizontales: Distribución de Calificaciones -->
+        <div class="col-md-6">
+            <canvas id="barCalificaciones"></canvas>
+        </div>
+
+        <!-- Gráfico de líneas: Tasa de Crecimiento de Usuarios -->
+        <div class="col-md-6">
+            <canvas id="lineCrecimientoUsuarios"></canvas>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Gráfico de radar: Calificación General por Paquete -->
+        <div class="col-md-6">
+            <canvas id="radarCalificacionPaquete"></canvas>
+        </div>
+
+        <!-- Gráfico de radar: Evaluación del Servicio -->
+        <div class="col-md-6">
+            <canvas id="radarEvaluacionServicio"></canvas>
+        </div>
+    </div>
+
 </div>
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const labels = {{ labels_estado|safe }};
-    const data = {{ valores_estado|safe }};
-
-    // Gráfico de barras
-    new Chart(document.getElementById('barChart'), {
+    // Gráfico de barras: Usuarios vs Paquetes
+    new Chart(document.getElementById('barUsuariosPaquetes'), {
         type: 'bar',
         data: {
-            labels: labels,
+            labels: ['Usuarios', 'Paquetes'],
             datasets: [{
-                label: 'Cantidad de Reservas',
-                data: data,
-                backgroundColor: ['RED', 'greeb', '#e74a3b'],
+                label: 'Cantidad',
+                data: [{{ indicadores.Total_Usuarios }}, {{ indicadores.Total_Paquetes }}],
+                backgroundColor: ['#4e73df', '#1cc88a'],
+                borderColor: ['#4e73df', '#1cc88a'],
+                borderWidth: 1
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: 'Reservas por Estado'
+                title: { display: true, text: 'Usuarios vs Paquetes' },
+                legend: { display: false }
+            }
+        }
+    });
+
+    // Gráfico de pastel: Reservas por estado
+    new Chart(document.getElementById('pieReservasEstado'), {
+        type: 'pie',
+        data: {
+            labels: {{ labels_reservas_estado|safe }},
+            datasets: [{
+                data: {{ valores_reservas_estado|safe }},
+                backgroundColor: ['#ffc107', '#28a745', '#dc3545'],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'Distribución de Reservas' },
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Gráfico de barras apiladas: Reservas por estado
+    new Chart(document.getElementById('barReservasEstado'), {
+        type: 'bar',
+        data: {
+            labels: {{ labels_reservas_estado|safe }},
+            datasets: [{
+                label: 'Reservas',
+                data: {{ valores_reservas_estado|safe }},
+                backgroundColor: ['#ffc107', '#28a745', '#dc3545'],
+                stack: 'reservas'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'Reservas por Estado' },
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
         }
     });
 
-    // Gráfico de pastel
-    new Chart(document.getElementById('pieChart'), {
-        type: 'pie',
+    // Gráfico de líneas: Ingresos Totales
+    new Chart(document.getElementById('lineIngresos'), {
+        type: 'line',
         data: {
-            labels: labels,
+            labels: {{ labels_ingresos|safe }},
             datasets: [{
-                data: data,
-                backgroundColor: ['#4e73df', '#1cc88a', '#e74a3b'],
+                label: 'Ingresos Totales',
+                data: {{ valores_ingresos|safe }},
+                borderColor: '#1cc88a',
+                fill: false
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: {
-                    position: 'bottom'
-                },
-                title: {
-                    display: true,
-                    text: 'Distribución de Reservas'
+                title: { display: true, text: 'Evolución de Ingresos Totales' }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
+            }
+        }
+    });
+
+    // Gráfico de líneas: Ingresos por Paquete
+    new Chart(document.getElementById('lineIngresosPorPaquete'), {
+        type: 'line',
+        data: {
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+            datasets: [{
+                label: 'Ingresos por Paquete',
+                data: [20000, 25000, 30000, 35000, 40000], // Cambiar estos valores por datos dinámicos
+                borderColor: '#007bff',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'Ingresos por Paquete' }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Gráfico de barras: Total de Pagos por Método
+    new Chart(document.getElementById('barPagosPorMetodo'), {
+        type: 'bar',
+        data: {
+            labels: ['Tarjeta', 'Efectivo', 'Transferencia'],
+            datasets: [{
+                label: 'Total de Pagos',
+                data: [120000, 50000, 30000], // Cambiar estos valores por datos reales
+                backgroundColor: ['#fd7e14', '#28a745', '#17a2b8'],
+                borderColor: ['#fd7e14', '#28a745', '#17a2b8'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'Total de Pagos por Método' },
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Gráfico de barras horizontales: Distribución de Calificaciones
+    new Chart(document.getElementById('barCalificaciones'), {
+        type: 'bar',
+        data: {
+            labels: ['1 Estrella', '2 Estrellas', '3 Estrellas', '4 Estrellas', '5 Estrellas'],
+            datasets: [{
+                label: 'Número de Calificaciones',
+                data: [10, 30, 50, 70, 100], // Cambiar estos valores por datos reales
+                backgroundColor: '#ffc107',
+                borderColor: '#ffc107',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            indexAxis: 'y',
+            plugins: {
+                title: { display: true, text: 'Distribución de Calificaciones' },
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Gráfico de líneas: Tasa de Crecimiento de Usuarios
+    new Chart(document.getElementById('lineCrecimientoUsuarios'), {
+        type: 'line',
+        data: {
+            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+            datasets: [{
+                label: 'Crecimiento de Usuarios',
+                data: [10, 20, 30, 40, 50], // Cambiar por datos reales
+                borderColor: '#dc3545',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'Tasa de Crecimiento de Usuarios' }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Gráfico de radar: Calificación General por Paquete
+    new Chart(document.getElementById('radarCalificacionPaquete'), {
+        type: 'radar',
+        data: {
+            labels: ['Servicio', 'Precio', 'Experiencia', 'Comodidad', 'Accesibilidad'],
+            datasets: [{
+                label: 'Calificación',
+                data: [4.5, 3.8, 4.2, 4.0, 4.7], // Cambiar estos valores por datos reales
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'Calificación General por Paquete' }
+            }
+        }
+    });
+
+    // Gráfico de radar: Evaluación del Servicio
+    new Chart(document.getElementById('radarEvaluacionServicio'), {
+        type: 'radar',
+        data: {
+            labels: ['Puntualidad', 'Atención', 'Calidad', 'Disponibilidad', 'Amabilidad'],
+            datasets: [{
+                label: 'Evaluación del Servicio',
+                data: [4.8, 4.3, 4.7, 4.5, 4.6], // Cambiar estos valores por datos reales
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'Evaluación del Servicio' }
             }
         }
     });
