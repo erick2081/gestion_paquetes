@@ -244,6 +244,7 @@ def eliminar_comentario(request, comentario_id):
     return redirect('listar_comentario')
 
 
+########################################
 
 
 def listar_factura(request):
@@ -340,3 +341,10 @@ def kpis_view(request):
         'labels_estado': json.dumps(labels_estado),
         'valores_estado': json.dumps(valores_estado),
     })
+
+
+
+
+
+
+
