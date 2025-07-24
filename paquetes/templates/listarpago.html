@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Lista de Pagos</h1>
+<a href="{% url 'crear_pago' %}" class="btn btn-primary mb-2">Crear Pago</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Reserva</th>
+            <th>Método de Pago</th>
+            <th>Monto</th>
+            <th>Estado de Pago</th>
+            <th>Fecha de Pago</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pago in pagos %}
+        <tr>
+            <td>{{ pago.reserva.id }}</td>
+            <td>{{ pago.metodo_pago }}</td>
+            <td>{{ pago.monto }}</td>
+            <td>{{ pago.estado_pago }}</td>
+            <td>{{ pago.fecha_pago }}</td>
+            <td>
+                <a href="{% url 'editar_pago' pago.id %}" class="btn btn-warning">Editar</a>
+                <a href="{% url 'eliminar_pago' pago.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

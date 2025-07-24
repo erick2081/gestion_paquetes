@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Editar Paquete</h1>
+<form method="POST" action="{% url 'editar_paquete' paquete.id %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ paquete.nombre }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" id="descripcion" name="descripcion" required>{{ paquete.descripcion }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="precio" class="form-label">Precio</label>
+        <input type="number" class="form-control" id="precio" name="precio" value="{{ paquete.precio }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="duracion" class="form-label">Duración (días)</label>
+        <input type="number" class="form-control" id="duracion" name="duracion" value="{{ paquete.duracion }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar Paquete</button>
+</form>
+{% endblock %}

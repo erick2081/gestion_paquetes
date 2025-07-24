@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Editar Comentario</h1>
+<form method="POST" action="{% url 'editar_comentario' comentario.id %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="comentario" class="form-label">Comentario</label>
+        <textarea class="form-control" id="comentario" name="comentario" required>{{ comentario.comentario }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="calificacion" class="form-label">Calificación</label>
+        <select class="form-control" id="calificacion" name="calificacion" required>
+            <option value="1" {% if comentario.calificacion==1 %}selected{% endif %}>1 Estrella</option>
+            <option value="2" {% if comentario.calificacion==2 %}selected{% endif %}>2 Estrellas</option>
+            <option value="3" {% if comentario.calificacion==3 %}selected{% endif %}>3 Estrellas</option>
+            <option value="4" {% if comentario.calificacion==4 %}selected{% endif %}>4 Estrellas</option>
+            <option value="5" {% if comentario.calificacion==5 %}selected{% endif %}>5 Estrellas</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar Comentario</button>
+</form>
+{% endblock %}

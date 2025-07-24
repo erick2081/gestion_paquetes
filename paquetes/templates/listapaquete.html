@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Lista de Paquetes</h1>
+<a href="{% url 'crear_paquete' %}" class="btn btn-primary mb-2">Crear Paquete</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Duración (días)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for paquete in paquetes %}
+        <tr>
+            <td>{{ paquete.nombre }}</td>
+            <td>{{ paquete.descripcion }}</td>
+            <td>{{ paquete.precio }}</td>
+            <td>{{ paquete.duracion }}</td>
+            <td>
+                <a href="{% url 'editar_paquete' paquete.id %}" class="btn btn-warning">Editar</a>
+                <a href="{% url 'eliminar_paquete' paquete.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

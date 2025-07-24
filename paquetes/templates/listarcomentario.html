@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Lista de Comentarios</h1>
+<a href="{% url 'crear_comentario' %}" class="btn btn-primary mb-2">Crear Comentario</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Paquete</th>
+            <th>Comentario</th>
+            <th>Calificación</th>
+            <th>Fecha de Comentario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for comentario in comentarios %}
+        <tr>
+            <td>{{ comentario.usuario.nombre }}</td>
+            <td>{{ comentario.paquete.nombre }}</td>
+            <td>{{ comentario.comentario }}</td>
+            <td>{{ comentario.calificacion }} Estrellas</td>
+            <td>{{ comentario.fecha_comentario }}</td>
+            <td>
+                <a href="{% url 'editar_comentario' comentario.id %}" class="btn btn-warning">Editar</a>
+                <a href="{% url 'eliminar_comentario' comentario.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

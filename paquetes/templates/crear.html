@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Crear Usuario</h1>
+<form method="POST" action="{% url 'crear_usuario' %}" id="crearForm">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" required>
+    </div>
+    <div class="mb-3">
+        <label for="correo" class="form-label">Correo Electrónico</label>
+        <input type="email" class="form-control" id="correo" name="correo" required>
+    </div>
+    <div class="mb-3">
+        <label for="tipo_usuario" class="form-label">Tipo de Usuario</label>
+        <select class="form-control" id="tipo_usuario" name="tipo_usuario" required>
+            <option value="cliente">Cliente</option>
+            <option value="administrador">Administrador</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+</form>
+{% endblock %}
+
+<script>
+    $(document).ready(function () {
+        $("#crearForm").validate({
+            rules: {
+                nombre: {
+                    required: true
+                },
+                correo: {
+                    required: true,
+                    email: true
+                },
+                tipo_usuario: {
+                    required: true
+                }
+            },
+            messages: {
+                nombre: "Por favor ingrese el nombre",
+                correo: {
+                    required: "Por favor ingrese el correo",
+                    email: "Por favor ingrese un correo válido"
+                },
+                tipo_usuario: "Por favor seleccione el tipo de usuario"
+            }
+        });
+    });
+</script>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Lista de Reservas</h1>
+<a href="{% url 'crear_reserva' %}" class="btn btn-primary mb-2">Crear Reserva</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Paquete</th>
+            <th>Fecha de Reserva</th>
+            <th>Cantidad Personas</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reserva in reservas %}
+        <tr>
+            <td>{{ reserva.usuario.nombre }}</td>
+            <td>{{ reserva.paquete.nombre }}</td>
+            <td>{{ reserva.fecha_reserva }}</td>
+            <td>{{ reserva.cantidad_personas }}</td>
+            <td>{{ reserva.total }}</td>
+            <td>{{ reserva.estado }}</td>
+            <td>
+                <a href="{% url 'editar_reserva' reserva.id %}" class="btn btn-warning">Editar</a>
+                <a href="{% url 'eliminar_reserva' reserva.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

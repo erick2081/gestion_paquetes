@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Editar Factura</h1>
+<form method="POST" action="{% url 'editar_factura' factura.id %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="monto_total" class="form-label">Monto Total</label>
+        <input type="number" class="form-control" id="monto_total" name="monto_total" value="{{ factura.monto_total }}"
+            required>
+    </div>
+    <div class="mb-3">
+        <label for="estado" class="form-label">Estado</label>
+        <select class="form-control" id="estado" name="estado" required>
+            <option value="emitida" {% if factura.estado=='emitida' %}selected{% endif %}>Emitida</option>
+            <option value="pagada" {% if factura.estado=='pagada' %}selected{% endif %}>Pagada</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar Factura</button>
+</form>
+{% endblock %}

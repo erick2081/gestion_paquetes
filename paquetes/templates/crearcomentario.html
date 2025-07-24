@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Crear Comentario</h1>
+<form method="POST" action="{% url 'crear_comentario' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="usuario" class="form-label">Usuario</label>
+        <select class="form-control" id="usuario" name="usuario" required>
+            {% for usuario in usuarios %}
+            <option value="{{ usuario.id }}">{{ usuario.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="paquete" class="form-label">Paquete</label>
+        <select class="form-control" id="paquete" name="paquete" required>
+            {% for paquete in paquetes %}
+            <option value="{{ paquete.id }}">{{ paquete.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="comentario" class="form-label">Comentario</label>
+        <textarea class="form-control" id="comentario" name="comentario" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="calificacion" class="form-label">Calificación</label>
+        <select class="form-control" id="calificacion" name="calificacion" required>
+            <option value="1">1 Estrella</option>
+            <option value="2">2 Estrellas</option>
+            <option value="3">3 Estrellas</option>
+            <option value="4">4 Estrellas</option>
+            <option value="5">5 Estrellas</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Crear Comentario</button>
+</form>
+{% endblock %}

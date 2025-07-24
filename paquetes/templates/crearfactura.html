@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Crear Factura</h1>
+<form method="POST" action="{% url 'crear_factura' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="reserva" class="form-label">Reserva</label>
+        <select class="form-control" id="reserva" name="reserva" required>
+            {% for reserva in reservas %}
+            <option value="{{ reserva.id }}">{{ reserva.id }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="pago" class="form-label">Pago</label>
+        <select class="form-control" id="pago" name="pago" required>
+            {% for pago in pagos %}
+            <option value="{{ pago.id }}">{{ pago.id }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="monto_total" class="form-label">Monto Total</label>
+        <input type="number" class="form-control" id="monto_total" name="monto_total" required>
+    </div>
+    <div class="mb-3">
+        <label for="estado" class="form-label">Estado</label>
+        <select class="form-control" id="estado" name="estado" required>
+            <option value="emitida">Emitida</option>
+            <option value="pagada">Pagada</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Crear Factura</button>
+</form>
+{% endblock %}
