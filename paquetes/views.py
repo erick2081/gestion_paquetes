@@ -292,3 +292,51 @@ def eliminar_factura(request, factura_id):
     factura.delete()
     messages.success(request, 'Factura eliminada correctamente.')
     return redirect('listar_factura')
+
+
+
+
+
+
+from django.db.models import Count, Sum, Avg
+from django.shortcuts import render
+import json
+
+def kpis_view(request):
+    total_usuarios = Usuario.objects.count()
+    total_paquetes = Paquete.objects.count()
+    total_reservas = Reserva.objects.count()
+
+    reservas_activas = Reserva.objects.filter(estado='activo').count()
+    reservas_finalizadas = Reserva.objects.filter(estado='finalizado').count()
+    reservas_canceladas = Reserva.objects.filter(estado='cancelado').count()
+
+    ingresos_totales = Reserva.objects.aggregate(total=Sum('total'))['total'] or 0
+
+    paquete_mas_reservado = Reserva.objects.values('paquete__nombre') \
+        .annotate(total=Count('id')).order_by('-total').first()
+
+    usuario_mas_reservas = Reserva.objects.values('usuario__nombre') \
+        .annotate(total=Count('id')).order_by('-total').first()
+
+    indicadores = {
+        'Total Usuarios': total_usuarios,
+        'Total Paquetes': total_paquetes,
+        'Total Reservas': total_reservas,
+        'Reservas Activas': reservas_activas,
+        'Reservas Finalizadas': reservas_finalizadas,
+        'Reservas Canceladas': reservas_canceladas,
+        'Ingresos Totales': ingresos_totales,
+        'Paquete Más Reservado': paquete_mas_reservado['paquete__nombre'] if paquete_mas_reservado else 'Sin datos',
+        'Usuario con Más Reservas': usuario_mas_reservas['usuario__nombre'] if usuario_mas_reservas else 'Sin datos',
+    }
+
+    # Datos para los gráficos
+    labels_estado = ['Activas', 'Finalizadas', 'Canceladas']
+    valores_estado = [reservas_activas, reservas_finalizadas, reservas_canceladas]
+
+    return render(request, 'kpis.html', {
+        'indicadores': indicadores,
+        'labels_estado': json.dumps(labels_estado),
+        'valores_estado': json.dumps(valores_estado),
+    })

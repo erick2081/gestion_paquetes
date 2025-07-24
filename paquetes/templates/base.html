@@ -69,7 +69,7 @@
 
         .light-mode {
             background-color: #fff;
-            color: #000;
+            color: #545454;
         }
 
         .content-container {
@@ -110,7 +110,7 @@
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: black;
+            background-color: rgb(99, 99, 99);
         }
 
         /* Toggle switch para cambiar entre modos */
@@ -150,6 +150,7 @@
                 <a href="{% url 'listar_pago' %}" class="list-group-item list-group-item-action">Pagos</a>
                 <a href="{% url 'listar_comentario' %}" class="list-group-item list-group-item-action">Comentario</a>
                 <a href="{% url 'listar_factura' %}" class="list-group-item list-group-item-action">Facturas</a>
+                <a href="{% url 'ver_kpis' %}" class="list-group-item list-group-item-action">KPIs</a>
             </div>
 
             <!-- Modo Oscuro/Claro -->

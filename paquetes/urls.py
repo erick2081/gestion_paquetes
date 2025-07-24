@@ -38,4 +38,6 @@ urlpatterns = [
     path('facturas/crear/', views.crear_factura, name='crear_factura'),
     path('facturas/editar/<int:factura_id>/', views.editar_factura, name='editar_factura'),
     path('facturas/eliminar/<int:factura_id>/', views.eliminar_factura, name='eliminar_factura'),
+
+    path('indicadores/', views.kpis_view, name='ver_kpis'),
 ]
